@@ -1,0 +1,279 @@
+Starting Dynare (version 7.0).
+Calling Dynare with arguments: noclearall
+Starting preprocessing of the model file ... 
+Found 76 equation(s). 
+Evaluating expressions... 
+Computing static model derivatives (order 1). 
+Normalizing the static model... 
+Finding the optimal block decomposition of the static model... 
+18 block(s) found: 
+  16 recursive block(s) and 2 simultaneous block(s). 
+  the largest simultaneous block has 56 equation(s) 
+                                 and 56 feedback variable(s). 
+Computing dynamic model derivatives (order 1). 
+Normalizing the dynamic model... 
+Finding the optimal block decomposition of the dynamic model... 
+8 block(s) found: 
+  7 recursive block(s) and 1 simultaneous block(s). 
+  the largest simultaneous block has 69 equation(s) 
+                                 and 63 feedback variable(s). 
+Preprocessing completed. 
+Preprocessing time: 0h00m00s.
+
+
+Residuals of the static equations:
+Equation number  1: lam1    :       0.000000
+Equation number  2: 2       :       0.000000
+Equation number  3: 3       :       0.000000
+Equation number  4: ch1     :       0.000000
+Equation number  5: 5       :       0.000000
+Equation number  6: c1      :       0.000000
+Equation number  7: n1      :       0.000000
+Equation number  8: k1      :       0.000000
+Equation number  9: qk1     :       0.000000
+Equation number 10: 10      :       0.000000
+Equation number 11: lam2    :       0.000000
+Equation number 12: 12      :       0.000000
+Equation number 13: 13      :       0.000000
+Equation number 14: ch2     :       0.000000
+Equation number 15: 15      :       0.000000
+Equation number 16: c2      :       0.000000
+Equation number 17: n2      :       0.000000
+Equation number 18: k2      :       0.000000
+Equation number 19: qk2     :       0.000000
+Equation number 20: 20      :       0.000000
+Equation number 21: 21      :       0.000000
+Equation number 22: m11     :       0.000000
+Equation number 23: m21     :       0.000000
+Equation number 24: 24      :       0.000000
+Equation number 25: m22     :       0.000000
+Equation number 26: m12     :       0.000000
+Equation number 27: 27      :       0.000000
+Equation number 28: 28      :       0.000000
+Equation number 29: 29      :       0.000000
+Equation number 30: 30      :       0.000000
+Equation number 31: 31      :       0.000000
+Equation number 32: ym1     :       0.000000
+Equation number 33: w1      :       0.000000
+Equation number 34: rk1     :       0.000000
+Equation number 35: 35      :       0.000000
+Equation number 36: 36      :       0.000000
+Equation number 37: xone1   :       0.000000
+Equation number 38: xtwo1   :       0.000000
+Equation number 39: pstar1  :       0.000000
+Equation number 40: v1      :       0.000000
+Equation number 41: 41      :       0.000000
+Equation number 42: ym2     :       0.000000
+Equation number 43: w2      :       0.000000
+Equation number 44: rk2     :       0.000000
+Equation number 45: 45      :       0.000000
+Equation number 46: 46      :       0.000000
+Equation number 47: xone2   :       0.000000
+Equation number 48: xtwo2   :       0.000000
+Equation number 49: pstar2  :       0.000000
+Equation number 50: v2      :       0.000000
+Equation number 51: ds1     :       0.000000
+Equation number 52: fs1     :       0.000000
+Equation number 53: 53      :       0.000000
+Equation number 54: fp1     :       0.000000
+Equation number 55: 55      :       0.000000
+Equation number 56: kg1     :       0.000000
+Equation number 57: b1      :       0.000000
+Equation number 58: 58      :       0.000000
+Equation number 59: 59      :       0.000000
+Equation number 60: 60      :       0.000000
+Equation number 61: ds2     :       0.000000
+Equation number 62: fs2     :       0.000000
+Equation number 63: 63      :       0.000000
+Equation number 64: fp2     :       0.000000
+Equation number 65: 65      :       0.000000
+Equation number 66: kg2     :       0.000000
+Equation number 67: b2      :       0.000000
+Equation number 68: 68      :       0.000000
+Equation number 69: 69      :       0.000000
+Equation number 70: 70      :       0.000000
+Equation number 71: yagg    :       0.000000
+Equation number 72: pinfagg :       0.000000
+Equation number 73: mp      :       0.000000
+Equation number 74: 74      :       0.000000
+Equation number 75: y1      :       0.000000
+Equation number 76: y2      :       0.000000
+
+
+
+STEADY-STATE RESULTS:
+
+cr1     		 0.604137
+ch1     		 0.604137
+c1      		 0.604137
+nr1     		 0.315754
+nh1     		 0.315754
+n1      		 0.315754
+inv1    		 0.195863
+k1      		 7.83453
+qk1     		 1
+lam1    		 1.65525
+y1      		 1
+ym1     		 1
+w1      		 1.76825
+rk1     		 0.035101
+mc1     		 0.833333
+pinf1   		 1
+pim1    		 1
+pstar1  		 1
+xone1   		 5.35681
+xtwo1   		 6.42817
+v1      		 1
+b1      		 0.4
+rb1     		 1.0101
+ds1     		 0.0040404
+fs1     		 0.08
+fp1     		 0.0040404
+ig1     		 0.08
+kg1     		 3.2
+a1      		 1
+g1      		 0.12
+tr1     		 0.0458034
+z1      		 0.0177814
+cr2     		 0.604137
+ch2     		 0.604137
+c2      		 0.604137
+nr2     		 0.315754
+nh2     		 0.315754
+n2      		 0.315754
+inv2    		 0.195863
+k2      		 7.83453
+qk2     		 1
+lam2    		 1.65525
+y2      		 1
+ym2     		 1
+w2      		 1.76825
+rk2     		 0.035101
+mc2     		 0.833333
+pinf2   		 1
+pim2    		 1
+pstar2  		 1
+xone2   		 5.35681
+xtwo2   		 6.42817
+v2      		 1
+b2      		 1
+rb2     		 1.0101
+ds2     		 0.010101
+fs2     		 0.08
+fp2     		 0.010101
+ig2     		 0.08
+kg2     		 3.2
+a2      		 1
+g2      		 0.12
+tr2     		 0.0458034
+z2      		 0.023842
+m11     		 0.85
+m21     		 0.15
+m12     		 0.15
+m22     		 0.85
+q11     		 1
+q21     		 1
+q12     		 1
+q22     		 1
+yagg    		 1
+pinfagg 		 1
+r       		 1.0101
+mp      		 0
+
+================================================================================
+MODEL_DIAGNOSTICS: Singularity in Static Jacobian
+================================================================================
+The Jacobian of the static model is singular.
+There are 2 collinear relationship(s) between the variables and the equations.
+
+--- Static Jacobian: Collinear variables (relation 1 of 2) ---
+    cr1, ch1, c1, nr1, nh1, n1, inv1, k1, lam1, y1
+    ym1, w1, xone1, xtwo1, b1, ds1, fs1, fp1, ig1, kg1
+    cr2, ch2, c2, nr2, nh2, n2, inv2, k2, lam2, y2
+    ym2, w2, xone2, xtwo2, b2, ds2, fs2, fp2, ig2, kg2
+    m11, m21, m12, m22, q11, q21, q12, q22
+
+--- Static Jacobian: Collinear variables (relation 2 of 2) ---
+    cr1, ch1, c1, nr1, nh1, n1, inv1, k1, lam1, y1
+    ym1, w1, mc1, pinf1, pim1, pstar1, xone1, xtwo1, b1, rb1
+    ds1, fs1, fp1, ig1, kg1, cr2, ch2, c2, nr2, nh2
+    n2, inv2, k2, lam2, y2, ym2, w2, mc2, pinf2, pim2
+    pstar2, xone2, xtwo2, b2, rb2, ds2, fs2, fp2, ig2, kg2
+    m11, m21, m12, m22, q11, q21, yagg, pinfagg, r
+
+--- Static Jacobian: Collinear equations (relation 1 of 2) ---
+    Equation 27: 27
+    Equation 28: 28
+    Equation 29: 29
+    Equation 30: 30
+
+--- Static Jacobian: Collinear equations (relation 2 of 2) ---
+    Equation 2: 2
+    Equation 12: 12
+    Equation 27: 27
+    Equation 29: 29
+    Equation 53: 53
+    Equation 63: 63
+
+MODEL_DIAGNOSTICS:  The singularity seems to be (partly) caused by the presence of a unit root
+MODEL_DIAGNOSTICS:  as the absolute value of one eigenvalue is in the range of +-1e-6 to 1.
+MODEL_DIAGNOSTICS:  If the model is actually supposed to feature unit root behavior, such a warning is expected,
+MODEL_DIAGNOSTICS:  but you should nevertheless check whether there is an additional singularity problem.
+MODEL_DIAGNOSTICS:  The presence of a singularity problem typically indicates that there is one
+MODEL_DIAGNOSTICS:  redundant equation entered in the model block, while another non-redundant equation
+MODEL_DIAGNOSTICS:  is missing. The problem often derives from Walras Law.
+
+EIGENVALUES:
+         Modulus             Real        Imaginary
+               0                0                0
+               0                0                0
+               0                0                0
+               0                0                0
+               0                0                0
+               0                0                0
+               0                0                0
+               0                0                0
+       8.653e-18       -8.653e-18                0
+       2.861e-17       -2.861e-17                0
+       5.658e-17       -5.658e-17                0
+       9.695e-17        9.695e-17                0
+       1.995e-16       -1.995e-16                0
+       6.871e-16       -6.871e-16                0
+          0.4557           0.4557                0
+          0.4958           0.4958                0
+             0.5              0.5                0
+            0.75             0.75                0
+            0.75             0.75                0
+          0.7639           0.7453           0.1672
+          0.7639           0.7453          -0.1672
+          0.7718           0.7242           0.2667
+          0.7718           0.7242          -0.2667
+          0.8973           0.8968          0.02892
+          0.8973           0.8968         -0.02892
+          0.8998           0.8966          0.07628
+          0.8998           0.8966         -0.07628
+          0.9541           0.9541                0
+          0.9762           0.9762                0
+            0.98             0.98                0
+          0.9855           0.9855                0
+               1                1                0
+               1                1                0
+           1.039            1.039                0
+           1.063            1.063                0
+           1.101            1.101                0
+           1.215            1.215                0
+           1.347            1.347                0
+           1.347            1.347                0
+           1.426            1.398           0.2831
+           1.426            1.398          -0.2831
+           1.785            1.785                0
+       9.912e+15        9.912e+15                0
+       1.477e+17       -1.477e+17                0
+       1.661e+17       -1.661e+17                0
+       2.584e+18       -2.584e+18                0
+       3.012e+18       -3.012e+18                0
+       1.881e+20        1.881e+20                0
+
+There are 15 eigenvalue(s) larger than 1 in modulus for 16 forward-looking variable(s).
+The order condition is NOT verified.
+
