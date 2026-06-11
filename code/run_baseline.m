@@ -58,9 +58,8 @@ plot(h, oo_.irfs.inv2_emp, 'LineWidth', 1.5);
 title('Private investment'); grid on;
 
 subplot(3,3,7);
-plot(h, oo_.irfs.n1_emp, 'LineWidth', 1.5); hold on;
-plot(h, oo_.irfs.n2_emp, 'LineWidth', 1.5);
-title('Labor demand'); grid on;
+plot(h, oo_.irfs.mp_emp, 'LineWidth', 1.5);
+title('Nominal interest rate'); grid on;
 
 subplot(3,3,8);
 plot(h, oo_.irfs.c1_emp, 'LineWidth', 1.5); hold on;
@@ -68,6 +67,6 @@ plot(h, oo_.irfs.c2_emp, 'LineWidth', 1.5);
 title('Consumption'); grid on;
 
 subplot(3,3,9);
-% plot(h, oo_.irfs.pinf1_emp, 'LineWidth', 1.5); hold on;
-plot(h, oo_.irfs.mp_emp, 'LineWidth', 1.5);
+plot(h, oo_.irfs.pinf1_emp, 'LineWidth', 1.5); hold on;
+plot(h, oo_.irfs.pinf2_emp, 'LineWidth', 1.5);
 title('Inflation'); grid on;
