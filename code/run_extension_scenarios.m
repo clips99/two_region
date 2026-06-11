@@ -11,6 +11,8 @@
 %
 % Scenario .mod files are regenerated from TANK_two_region_baseline.mod on
 % every run. TANK_two_region_baseline_old.mod is only a historical backup.
+% Full-horizon IRF figures are exported for each scenario, using the same
+% low-debt/high-debt panel layout as baseline_irf_comparison.png.
 
 clear;
 clc;
@@ -108,12 +110,11 @@ fprintf('\nScenario status\n');
 fprintf('--------------------------------\n');
 disp(status);
 
-fprintf('\nKey high-debt minus low-debt differences\n');
-fprintf('--------------------------------\n');
-disp(key_t1);
-
 if any(status.status == "ok")
-    make_diff_figure(summary);
+    figure_files = make_extension_irf_figures(scenarios, status);
+    fprintf('\nFull-horizon IRF figures\n');
+    fprintf('--------------------------------\n');
+    disp(table(figure_files, 'VariableNames', {'file'}));
 end
 
 function scenario = make_scenario(name, label, replacements, notes)
@@ -181,30 +182,57 @@ function irf = get_irf(oo_, var_name, shock_suffix)
     irf = oo_.irfs.(field);
 end
 
-function make_diff_figure(summary)
-    metrics = ["Debt service pressure", "Public investment", ...
-        "Public capital", "Final output"];
-    fig = figure('Visible', 'off', 'Color', 'w', 'Position', [100 100 1200 800]);
-    tiledlayout(2, 2, 'Padding', 'compact', 'TileSpacing', 'compact');
+function figure_files = make_extension_irf_figures(scenarios, status)
+    shock_suffix = '_emp';
+    panels = {
+        'Debt service pressure', 'ds1', 'ds2';
+        'Fiscal space',          'fs1', 'fs2';
+        'Public investment',     'ig1', 'ig2';
+        'Public capital',        'kg1', 'kg2';
+        'Final output',          'y1',  'y2';
+        'Private investment',    'inv1','inv2';
+        'Labor demand',          'n1',  'n2';
+        'Consumption',           'c1',  'c2';
+        'Inflation',             'pinf1','pinf2'
+    };
 
-    for i = 1:numel(metrics)
-        nexttile;
-        rows = summary(summary.metric == metrics(i), :);
-        for r = 1:height(rows)
-            y = [rows.diff_t1(r), rows.diff_t4(r), rows.diff_t8(r), rows.diff_t12(r)];
-            plot([1 4 8 12], y, 'LineWidth', 1.2);
-            hold on;
+    figure_files = strings(0, 1);
+    for s = 1:numel(scenarios)
+        scenario = scenarios(s);
+        row = status(status.scenario == string(scenario.name), :);
+        if height(row) == 0 || row.status(1) ~= "ok"
+            continue;
         end
+
+        result_file = fullfile(scenario.name, 'Output', [scenario.name '_results.mat']);
+        loaded = load(result_file, 'oo_');
+        file_name = ['extension_irf_' scenario.name '.png'];
+        make_irf_figure(loaded.oo_, shock_suffix, panels, scenario.label, file_name);
+        figure_files(end + 1, 1) = string(file_name); %#ok<AGROW>
+    end
+end
+
+function make_irf_figure(oo_, shock_suffix, panels, label, file_name)
+    fig = figure('Visible', 'off', 'Color', 'w', 'Position', [100 100 1200 800]);
+    tiledlayout(3, 3, 'Padding', 'compact', 'TileSpacing', 'compact');
+    for i = 1:size(panels, 1)
+        nexttile;
+        low_irf = get_irf(oo_, panels{i, 2}, shock_suffix);
+        high_irf = get_irf(oo_, panels{i, 3}, shock_suffix);
+        horizon = 1:numel(low_irf);
+        plot(horizon, low_irf, 'LineWidth', 1.4);
+        hold on;
+        plot(horizon, high_irf, '--', 'LineWidth', 1.4);
         yline(0, ':');
-        title(metrics(i), 'Interpreter', 'none');
+        title(panels{i, 1}, 'Interpreter', 'none');
         xlabel('period');
-        ylabel('high debt - low debt');
         grid on;
         if i == 1
-            legend(rows.label, 'Location', 'best', 'Interpreter', 'none');
+            legend({'low debt', 'high debt'}, 'Location', 'best');
         end
     end
 
-    exportgraphics(fig, 'extension_scenario_diff_irfs.png', 'Resolution', 180);
+    sgtitle(label, 'Interpreter', 'none');
+    exportgraphics(fig, file_name, 'Resolution', 180);
     close(fig);
 end
