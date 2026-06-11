@@ -1,0 +1,653 @@
+\documentclass[12pt,UTF8]{ctexart}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{float}
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{assumption}{假设}
+\newtheorem{proposition}{命题}
+\newtheorem{remark}{备注}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\barx}[1]{\overline{#1}}
+
+\title{货币紧缩、地方债务与公共投资传导：\\一个包含央地财政关系、异质性家庭、私人资本和跨地区中间品投入的两地区 DSGE 模型}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本文构建一个适用于中国地方政府债务问题的两地区新凯恩斯 DSGE 模型。模型同时包含地方政府债务、中央--地方税收分成、中央转移支付、公共投资、公共资本、私人资本、跨地区中间品投入和异质性家庭。与将财政空间收缩主要理解为居民转移支付下降的货币联盟模型不同，本文把中国地方政府的财政反应置于公共投资和准公共投资调整之中。统一货币紧缩提高名义利率并降低通胀，从而提高既有地方债务的实际付息负担。由于高债务地区的初始债务率更高，同样的货币紧缩会造成更强的付息压力和更紧的财政空间。地方政府在预算约束和债务稳定压力下压缩公共投资，公共资本积累随之放缓，并通过生产外部性和跨地区中间品需求传导至本地生产率、私人投资、劳动收入、消费和通胀。央地税收分成决定地方政府可支配财政收入，中央转移支付则作为缓冲债务付息压力和稳定公共投资的重要财政安排。模型中的异质性家庭用于刻画消费响应的放大机制；私人资本用于刻画标准货币政策传导和公共资本对私人生产要素的互补作用。文末给出完整的非线性动态系统，可直接翻译为 Dynare 代码。
+
+\vspace{0.3cm}
+\noindent\textbf{关键词：} 货币紧缩；地方政府债务；税收分成；中央转移支付；公共投资；公共资本；私人资本；TANK；两地区 DSGE
+\end{abstract}
+
+\newpage
+\setcounter{page}{1}
+
+\section{模型定位和核心传导链条}
+
+本文研究统一货币紧缩如何在地方政府债务率不同的地区之间产生非对称宏观效应。模型包含两个地区，记为 $j\in\{1,2\}$。地区 1 表示低债务地区，地区 2 表示高债务地区。两地区在偏好、技术、价格粘性和政策参数上保持对称，唯一的基准异质性来自稳态地方政府债务率：
+\begin{equation}
+\frac{\bar B^2}{\bar Y^2}>\frac{\bar B^1}{\bar Y^1}.
+\end{equation}
+这一设定使货币紧缩后的地区分化主要来自地方债务负担和公共投资调整，而不是来自外生技术、偏好或价格粘性差异。
+
+本文采用的最终模型设定为：两地区 DSGE、地方政府债务、中央--地方税收分成、中央转移支付、公共投资、公共资本、私人资本、跨地区中间品投入和异质性家庭。其核心传导链条为
+\begin{equation}
+\varepsilon_{MP,t}>0
+\Rightarrow R_t\uparrow,\ \Pi_t^j\downarrow
+\Rightarrow DS_t^j\uparrow
+\Rightarrow FS_t^j\downarrow
+\Rightarrow I_{G,t}^j\downarrow
+\Rightarrow K_{G,t+1}^j\downarrow
+\Rightarrow Y_{M,t}^j,Y_t^j,I_t^j,C_t^j,\Pi_t^j\downarrow.
+\end{equation}
+其中 $R_t$ 是统一名义利率，$\Pi_t^j$ 是地区最终品通胀率，$DS_t^j$ 是地方政府实际付息压力，$FS_t^j$ 是地方可支配财政空间，$I_{G,t}^j$ 是地方公共投资，$K_{G,t}^j$ 是地方公共资本。由于高债务地区有更大的 $B_{t-1}^j/Y_t^j$，同样的 $R_t$ 上升和 $\Pi_t^j$ 下降会使其实际付息压力上升更多，从而压缩可支配财政空间并造成更强的公共投资挤出。中央转移支付可以缓冲这一收缩效应，但在基准机制中不足以完全抵消高债务地区的付息压力。
+
+异质性家庭并非该机制成立的必要条件。即使采用代表性家庭，只要地方债务付息压力会压缩公共投资，模型仍能产生“高债务地区公共资本和产出下降更多”的主机制。但是，异质性家庭对于解释消费响应很重要。公共投资下降会压低劳动需求、工资和当期收入，hand-to-mouth 家庭无法跨期平滑消费，因此其消费下降更明显，从而放大地区总消费和通胀的下行压力。私人资本则是标准 DSGE 模型中不可或缺的生产状态变量，它使模型能够同时刻画货币紧缩对私人投资的常规传导，以及公共资本下降对私人资本边际产出和投资的影响。
+
+\section{经济环境}
+
+经济由两个地区组成。每个地区包括 Ricardian 家庭、hand-to-mouth 家庭、最终品企业、中间品企业、资本品生产者和地方政府。最终品企业使用来自两个地区的中间品生产本地区最终品；中间品企业使用私人资本、劳动和公共资本生产差异化产品，并面临 Calvo 价格粘性；地方政府发行一时期名义债务，将地方税收留成和中央转移支付用于政府消费、居民转移支付和公共投资；中央政府通过税收分成和转移支付影响地方财政空间；统一货币当局根据全国通胀和产出设定共同名义利率。
+
+所有实际变量均以本地区最终品价格 $P_t^j$ 平减。地区最终品通胀率为
+\begin{equation}
+\Pi_t^j=\frac{P_t^j}{P_{t-1}^j},
+\end{equation}
+地区中间品价格指数为 $P_{M,t}^j$，中间品通胀率为
+\begin{equation}
+\Pi_{M,t}^j=\frac{P_{M,t}^j}{P_{M,t-1}^j}.
+\end{equation}
+定义地区 $j$ 中以最终品计价的地区 $k$ 中间品相对价格为
+\begin{equation}
+Q_{k,t}^j\equiv \frac{P_{M,t}^k}{P_t^j},\qquad k,j\in\{1,2\}.
+\end{equation}
+相对价格动态满足
+\begin{equation}
+\frac{Q_{k,t}^j}{Q_{k,t-1}^j}=\frac{\Pi_{M,t}^k}{\Pi_t^j}.
+\label{eq:q_law}
+\end{equation}
+
+\section{家庭部门：TANK 结构与消费放大机制}
+
+地区 $j$ 有两类家庭。Ricardian 家庭占比为 $1-\lambda_j$，能够持有金融资产和私人资本；hand-to-mouth 家庭占比为 $\lambda_j$，不能储蓄，其消费等于当期可支配收入。地区总消费和总劳动为
+\begin{align}
+C_t^j&=(1-\lambda_j)C_{R,t}^j+\lambda_j C_{H,t}^j,
+\label{eq:C_agg}\\
+N_t^j&=(1-\lambda_j)N_{R,t}^j+\lambda_j N_{H,t}^j.
+\label{eq:N_agg}
+\end{align}
+
+\subsection{Ricardian 家庭}
+
+地区 $j$ 的 Ricardian 家庭最大化
+\begin{equation}
+\E_0\sum_{t=0}^{\infty}\beta^t
+\left[
+\frac{(C_{R,t}^j)^{1-\sigma}}{1-\sigma}
+-\chi_N\frac{(N_{R,t}^j)^{1+\varphi}}{1+\varphi}
+\right],
+\end{equation}
+其中 $\beta\in(0,1)$ 是贴现因子，$\sigma>0$ 是相对风险厌恶系数，$\varphi>0$ 是劳动供给弹性倒数，$\chi_N>0$ 是劳动负效用权重。
+
+Ricardian 家庭部门持有本地区一时期地方政府债券 $A_t^j$ 和私人资本 $K_t^j$，并决定私人投资 $I_t^j$。为避免混淆，本文将 $C_{R,t}^j$ 和 $N_{R,t}^j$ 定义为每个 Ricardian 家庭的消费和劳动供给，而将 $A_t^j$、$K_t^j$ 和 $I_t^j$ 定义为地区总人口口径下由 Ricardian 家庭部门持有或决定的总量。因此，Ricardian 家庭部门的合并预算约束为
+\begin{equation}
+(1-\lambda_j)C_{R,t}^j+I_t^j+A_t^j
+=
+(1-\lambda_j)W_t^jN_{R,t}^j+R_{K,t}^jK_t^j
++\frac{R_{B,t-1}^j}{\Pi_t^j}A_{t-1}^j
++\Omega_t^j-\mathcal T_{R,t}^j,
+\label{eq:budget_R}
+\end{equation}
+其中 $W_t^j$ 是实际工资，$R_{K,t}^j$ 是私人资本实际租金，$R_{B,t}^j$ 是地区 $j$ 地方债名义利率，$\Omega_t^j$ 是企业利润分红，$\mathcal T_{R,t}^j$ 是 Ricardian 家庭部门缴纳的总量一次性税收。一次性税收仅用于财政预算闭合，不影响一阶条件。债券市场出清为 $A_t^j=B_t^j$。
+
+Ricardian 家庭的消费边际效用为
+\begin{equation}
+\Lambda_{R,t}^j=(C_{R,t}^j)^{-\sigma}.
+\label{eq:lambda_R}
+\end{equation}
+债券 Euler 方程为
+\begin{equation}
+\Lambda_{R,t}^j
+=\beta \E_t\left[\Lambda_{R,t+1}^j\frac{R_{B,t}^j}{\Pi_{t+1}^j}\right].
+\label{eq:euler_bond}
+\end{equation}
+劳动供给条件为
+\begin{equation}
+\chi_N(N_{R,t}^j)^{\varphi}=\Lambda_{R,t}^j W_t^j.
+\label{eq:labor_R}
+\end{equation}
+
+私人资本积累满足
+\begin{equation}
+K_{t+1}^j=(1-\delta_K)K_t^j+
+\left[1-S\left(\frac{I_t^j}{I_{t-1}^j}\right)\right]I_t^j,
+\label{eq:K_law}
+\end{equation}
+其中 $\delta_K\in(0,1)$ 为私人资本折旧率，投资调整成本为
+\begin{equation}
+S(x)=\frac{\phi_I}{2}(x-1)^2,
+\qquad S(1)=0,
+\qquad S'(1)=0,
+\qquad S''(1)=\phi_I>0.
+\end{equation}
+令 $Q_{K,t}^j$ 表示 Tobin's $Q$。资本 Euler 方程为
+\begin{equation}
+Q_{K,t}^j
+=\beta\E_t\left[
+\frac{\Lambda_{R,t+1}^j}{\Lambda_{R,t}^j}
+\left(R_{K,t+1}^j+(1-\delta_K)Q_{K,t+1}^j\right)
+\right].
+\label{eq:euler_capital}
+\end{equation}
+投资一阶条件为
+\begin{align}
+1=&Q_{K,t}^j
+\left[
+1-S\left(\frac{I_t^j}{I_{t-1}^j}\right)
+-S'\left(\frac{I_t^j}{I_{t-1}^j}\right)\frac{I_t^j}{I_{t-1}^j}
+\right]
+\notag\\
+&+\beta\E_t\left[
+\frac{\Lambda_{R,t+1}^j}{\Lambda_{R,t}^j}
+Q_{K,t+1}^j
+S'\left(\frac{I_{t+1}^j}{I_t^j}\right)
+\left(\frac{I_{t+1}^j}{I_t^j}\right)^2
+\right].
+\label{eq:inv_foc}
+\end{align}
+若需要先降低 Dynare 调试难度，可以设 $\phi_I=0$，此时 $Q_{K,t}^j=1$，私人资本积累退化为无调整成本的标准形式。
+
+\subsection{Hand-to-mouth 家庭}
+
+Hand-to-mouth 家庭不能持有资产，其预算约束为
+\begin{equation}
+C_{H,t}^j=W_t^jN_{H,t}^j+TR_{H,t}^j,
+\label{eq:budget_H}
+\end{equation}
+其中 $TR_{H,t}^j$ 是每个 hand-to-mouth 家庭获得的转移支付。本文的基准机制并不依赖 $TR_{H,t}^j$ 的反周期调整；该转移支付可以设为稳态常数。公共投资收缩通过压低劳动需求、工资和当期收入影响 hand-to-mouth 家庭消费。
+
+Hand-to-mouth 家庭的劳动供给满足
+\begin{equation}
+\chi_N(N_{H,t}^j)^{\varphi}=(C_{H,t}^j)^{-\sigma}W_t^j.
+\label{eq:labor_H}
+\end{equation}
+与 Ricardian 家庭相比，hand-to-mouth 家庭不能通过资产组合平滑冲击，因此工资和就业的下降会更快地传导到消费。
+
+\section{最终品企业：跨地区中间品投入}
+
+地区 $j$ 的最终品企业完全竞争，使用来自两个地区的中间品生产最终品：
+\begin{equation}
+Y_t^j=
+\left[
+\omega_j^{\frac{1}{\eta}}(M_{j,t}^j)^{\frac{\eta-1}{\eta}}
++(1-\omega_j)^{\frac{1}{\eta}}(M_{-j,t}^j)^{\frac{\eta-1}{\eta}}
+\right]^{\frac{\eta}{\eta-1}},
+\label{eq:final_production}
+\end{equation}
+其中 $M_{j,t}^j$ 是地区 $j$ 使用的本地中间品，$M_{-j,t}^j$ 是地区 $j$ 使用的另一地区中间品，$\omega_j\in(0,1)$ 是本地中间品权重，$\eta>0$ 是本地和外地中间品之间的替代弹性。
+
+成本最小化给出最终品价格指数：
+\begin{equation}
+1=\left[
+\omega_j(Q_{j,t}^j)^{1-\eta}
++(1-\omega_j)(Q_{-j,t}^j)^{1-\eta}
+\right]^{\frac{1}{1-\eta}},
+\label{eq:final_price_index}
+\end{equation}
+以及中间品需求函数：
+\begin{align}
+M_{j,t}^j&=\omega_j(Q_{j,t}^j)^{-\eta}Y_t^j,
+\label{eq:demand_local}\\
+M_{-j,t}^j&=(1-\omega_j)(Q_{-j,t}^j)^{-\eta}Y_t^j.
+\label{eq:demand_foreign}
+\end{align}
+因此，某一地区最终需求下降不仅压低本地中间品需求，也会通过 $M_{-j,t}^j$ 降低外地中间品需求，形成跨地区生产联系。
+
+\section{中间品企业：私人资本、公共资本和价格粘性}
+
+\subsection{生产技术和要素需求}
+
+地区 $j$ 的中间品企业处于垄断竞争环境。聚合生产函数为
+\begin{equation}
+Y_{M,t}^j=\frac{A_t^j(K_{G,t}^j)^{\gamma_G}(K_t^j)^{\alpha}(N_t^j)^{1-\alpha}}{V_t^j},
+\label{eq:intermediate_production}
+\end{equation}
+其中 $Y_{M,t}^j$ 是地区 $j$ 的中间品聚合产出，$A_t^j$ 是地区生产率，$K_t^j$ 是私人资本，$K_{G,t}^j$ 是地方公共资本，$V_t^j$ 是价格离散度，$\alpha\in(0,1)$ 是私人资本产出弹性，$\gamma_G\ge0$ 是公共资本生产外部性。
+
+技术过程为
+\begin{equation}
+\log A_t^j=\rho_A\log A_{t-1}^j+\varepsilon_{A,t}^j.
+\label{eq:A_process}
+\end{equation}
+基准模拟中可关闭地区技术冲击，仅保留统一货币政策冲击。
+
+令 $MC_t^j$ 表示以地区 $j$ 中间品价格 $P_{M,t}^j$ 计价的实际边际成本。因此，以地区最终品计价的边际成本为 $Q_{j,t}^jMC_t^j$。中间品企业的要素需求条件为
+\begin{align}
+W_t^j&=(1-\alpha)Q_{j,t}^jMC_t^j\frac{Y_{M,t}^jV_t^j}{N_t^j},
+\label{eq:wage_demand}\\
+R_{K,t}^j&=\alpha Q_{j,t}^jMC_t^j\frac{Y_{M,t}^jV_t^j}{K_t^j}.
+\label{eq:rk_demand}
+\end{align}
+这里 $Y_{M,t}^jV_t^j$ 是有效生产量，即在价格离散下企业为满足聚合需求所需的实际生产投入。若一阶近似并忽略价格离散度的二阶影响，式中 $V_t^j$ 可在一阶附近近似为 1；非线性 Dynare 系统中保留 $V_t^j$ 更严谨。
+
+地区 $j$ 的中间品市场出清为
+\begin{equation}
+Y_{M,t}^j=M_{j,t}^1+M_{j,t}^2.
+\label{eq:intermediate_clearing}
+\end{equation}
+其中 $M_{j,t}^1$ 和 $M_{j,t}^2$ 分别表示地区 1 和地区 2 最终品企业对地区 $j$ 中间品的需求。
+
+\subsection{Calvo 价格粘性}
+
+每期只有比例 $1-\theta_p$ 的中间品企业可以重新定价，其余企业保持上一期价格不变。令
+\begin{equation}
+p_{*,t}^j=\frac{P_{*,t}^j}{P_{M,t}^j}
+\end{equation}
+为相对重置价格，$\epsilon_p>1$ 为中间品替代弹性。中间品价格指数满足
+\begin{equation}
+1=(1-\theta_p)(p_{*,t}^j)^{1-\epsilon_p}
++\theta_p(\Pi_{M,t}^j)^{\epsilon_p-1}.
+\label{eq:calvo_index}
+\end{equation}
+最优重置价格为
+\begin{equation}
+p_{*,t}^j=\frac{\epsilon_p}{\epsilon_p-1}\frac{X_{1,t}^j}{X_{2,t}^j},
+\label{eq:pstar}
+\end{equation}
+其中辅助变量递归为
+\begin{align}
+X_{1,t}^j&=\Lambda_{R,t}^jQ_{j,t}^jMC_t^jY_{M,t}^j
++\beta\theta_p\E_t\left[(\Pi_{M,t+1}^j)^{\epsilon_p}X_{1,t+1}^j\right],
+\label{eq:x1}\\
+X_{2,t}^j&=\Lambda_{R,t}^jQ_{j,t}^jY_{M,t}^j
++\beta\theta_p\E_t\left[(\Pi_{M,t+1}^j)^{\epsilon_p-1}X_{2,t+1}^j\right].
+\label{eq:x2}
+\end{align}
+$Q_{j,t}^j$ 出现在递归中，是因为企业利润以本地最终品计价，而定价基准是本地中间品价格。价格离散度满足
+\begin{equation}
+V_t^j=(1-\theta_p)(p_{*,t}^j)^{-\epsilon_p}
++\theta_p(\Pi_{M,t}^j)^{\epsilon_p}V_{t-1}^j.
+\label{eq:dispersion}
+\end{equation}
+稳态下 $\bar\Pi_M^j=1$、$\bar p_*^j=1$、$\bar V^j=1$，并且 $\bar{MC}^j=(\epsilon_p-1)/\epsilon_p$。
+
+\section{地方政府：央地财政关系、债务、公共投资和公共资本}
+
+地方政府发行一时期名义债券。令 $B_t^j$ 表示以地区最终品计价的期末实际地方债务，$R_{B,t}^j$ 表示地区 $j$ 地方债名义利率。为刻画中国式央地财政关系，设地区总财政收入以比例 $\tau_Y$ 随产出变动。这里的 $\tau_Y Y_t^j$ 应理解为非扭曲的比例型财政收入，而不是会直接进入企业边际成本的一般流转税。中央政府分享比例为 $\theta_T\in[0,1]$，地方政府留成比例为 $1-\theta_T$。因此，地区 $j$ 的地方税收留成为 $(1-\theta_T)\tau_Y Y_t^j$，中央对地方的净转移支付为 $Z_t^j$。地方政府预算约束为
+\begin{equation}
+B_t^j=\frac{R_{B,t-1}^j}{\Pi_t^j}B_{t-1}^j
++G_t^j+I_{G,t}^j+\lambda_jTR_{H,t}^j
+-(1-\theta_T)\tau_Y Y_t^j-Z_t^j,
+\label{eq:gov_budget}
+\end{equation}
+其中 $G_t^j$ 为地方政府消费，$I_{G,t}^j$ 为地方公共投资，$\lambda_jTR_{H,t}^j$ 为对 hand-to-mouth 家庭的总转移支出。预算约束中 $Z_t^j$ 前为负号，是因为中央转移支付属于地方政府收入，可以减少地方债务融资需求。基准机制中，$G_t^j$ 和 $TR_{H,t}^j$ 可固定在稳态或设为平稳外生过程，公共投资是主要财政调整变量；$Z_t^j$ 则用于刻画中央财政对地方债务付息压力和公共投资收缩的缓冲作用。
+
+定义地方政府可支配财政空间为
+\begin{equation}
+FS_t^j\equiv (1-\theta_T)\tau_Y Y_t^j+Z_t^j
+-\left(\frac{R_{B,t-1}^j}{\Pi_t^j}-1\right)B_{t-1}^j
+-G_t^j-\lambda_jTR_{H,t}^j.
+\label{eq:FS}
+\end{equation}
+该变量表示扣除实际利息负担、政府消费和居民转移支出之后，地方政府可用于公共投资和债务稳定的财政资源。这里扣除的是实际净付息负担，而不是滚动续作的一期债务本金；本金滚动已经体现在地方政府债务存量 $B_t^j$ 的动态中。货币紧缩提高实际付息负担并压低产出税基，因而会压缩 $FS_t^j$；中央转移支付 $Z_t^j$ 则可以部分缓冲这一收缩。
+
+地方债利率由统一政策利率和地方债务风险溢价共同决定：
+\begin{equation}
+\frac{R_{B,t}^j}{R_t}=
+\exp\left[\mu_B\left(\frac{B_t^j/Y_t^j}{\bar B^j/\bar Y^j}-1\right)\right],
+\label{eq:local_rate}
+\end{equation}
+其中 $\mu_B\ge0$。基准模拟可以先令 $\mu_B=0$，使 $R_{B,t}^j=R_t$，从而突出初始债务率差异本身的放大效应。
+
+定义实际债务付息压力为
+\begin{equation}
+DS_t^j\equiv \left(\frac{R_{B,t-1}^j}{\Pi_t^j}-1\right)\frac{B_{t-1}^j}{Y_t^j}.
+\label{eq:DS}
+\end{equation}
+该变量是本文财政传导的核心。由于政府债务是一时期名义债务，当期到期债务的实际付息压力取决于上一期确定的地方债利率 $R_{B,t-1}^j$ 和当期地区通胀 $\Pi_t^j$；当期货币紧缩还会通过提高 $R_{B,t}^j$ 影响下一期付息压力。因此，货币紧缩会通过“当期通胀下降”和“后续再融资利率上升”两个时间维度提高地方实际付息压力。高债务地区的 $B_{t-1}^j/Y_t^j$ 更大，因此 $DS_t^j$ 上升更多。
+
+为了刻画地方政府预算执行和项目调整的滞后性，定义平滑财政压力：
+\begin{equation}
+FP_t^j=\rho_{FP}FP_{t-1}^j+(1-\rho_{FP})DS_t^j,
+\label{eq:FP}
+\end{equation}
+其中 $\rho_{FP}\in[0,1)$。地方公共投资规则为
+\begin{align}
+\frac{I_{G,t}^j}{\bar I_G^j}
+&=\left(\frac{I_{G,t-1}^j}{\bar I_G^j}\right)^{\rho_{IG}}
+\exp\Bigg[
+-\psi_{DS}\left(\frac{FP_t^j}{\bar{FP}^j}-1\right)
++\psi_{FS}\left(\frac{FS_t^j}{\bar{FS}^j}-1\right)\notag\\
+&\qquad
+-\psi_B\left(\frac{B_{t-1}^j/Y_{t-1}^j}{\bar B^j/\bar Y^j}-1\right)
++\psi_Z\left(\frac{Z_t^j}{\bar Z^j}-1\right)
++\varepsilon_{IG,t}^j
+\Bigg].
+\label{eq:IG_rule}
+\end{align}
+其中 $\rho_{IG}\in[0,1)$ 为公共投资惯性，$\psi_{DS}>0$ 表示付息压力对公共投资的挤出，$\psi_{FS}>0$ 表示地方可支配财政空间对公共投资的支撑作用，$\psi_B>0$ 表示债务稳定反应，$\psi_Z\ge0$ 表示中央专项转移或项目资金对公共投资的额外缓冲作用。若希望避免中央转移支付在 $FS_t^j$ 和公共投资规则中重复发挥作用，可在基准模拟中令 $\psi_Z=0$，仅通过 $FS_t^j$ 体现中央转移支付的缓冲效应。公共资本积累为
+\begin{equation}
+K_{G,t+1}^j=(1-\delta_G)K_{G,t}^j+I_{G,t}^j,
+\label{eq:KG_law}
+\end{equation}
+其中 $\delta_G\in(0,1)$ 为公共资本折旧率。
+
+政府消费、居民转移支付和中央转移支付可设为
+\begin{align}
+\log\left(\frac{G_t^j}{\bar G^j}\right)&=\rho_G\log\left(\frac{G_{t-1}^j}{\bar G^j}\right)+\varepsilon_{G,t}^j,
+\label{eq:G_rule}\\
+\log\left(\frac{TR_{H,t}^j}{\bar{TR}_H^j}\right)&=\rho_{TR}\log\left(\frac{TR_{H,t-1}^j}{\bar{TR}_H^j}\right)+\varepsilon_{TR,t}^j,
+\label{eq:TR_rule}\\
+\log\left(\frac{Z_t^j}{\bar Z^j}\right)&=\rho_Z\log\left(\frac{Z_{t-1}^j}{\bar Z^j}\right)
++\phi_{Z,DS}\left(\frac{DS_t^j}{\bar{DS}^j}-1\right)
++\phi_{Z,B}\left(\frac{B_{t-1}^j/Y_{t-1}^j}{\bar B^j/\bar Y^j}-1\right)
++\varepsilon_{Z,t}^j.
+\label{eq:Z_rule}
+\end{align}
+基准模型可令 $\rho_G=\rho_{TR}=\rho_Z=0$ 且对应冲击为零，使这些变量固定在稳态；政策实验中再打开中央转移支付反应。若 $\phi_{Z,DS}>0$ 或 $\phi_{Z,B}>0$，中央政府会向付息压力或债务率较高的地区提供更多转移支付，从而缓解地方公共投资收缩。
+
+
+\subsection{中央政府预算约束的扩展形式}
+
+基准模型将中央转移支付 $Z_t^j$ 设为外生或规则型变量，不显式求解中央政府债务。这一处理可以在不显著增加状态变量的情况下刻画央地财政关系。若研究问题进一步关注中央财政约束本身，可加入中央政府预算约束：
+\begin{equation}
+B_{C,t}=\frac{R_{t-1}}{\Pi_t}B_{C,t-1}+G_{C,t}+\sum_{j=1}^2 s_jZ_t^j-\theta_T\tau_Y Y_t,
+\label{eq:central_budget}
+\end{equation}
+其中 $B_{C,t}$ 为中央政府实际债务，$G_{C,t}$ 为中央政府支出，$\theta_T\tau_Y Y_t$ 为中央税收收入。本文基准模型不显式引入式 \eqref{eq:central_budget}，而是在政策扩展中使用该式考察中央财政约束是否削弱对高债务地区的支持。
+
+\section{统一货币政策}
+
+货币当局根据全国通胀和全国产出设定统一名义利率。地区权重为 $s_j>0$ 且 $s_1+s_2=1$。全国总产出和通胀为
+\begin{align}
+Y_t&=s_1Y_t^1+s_2Y_t^2,
+\label{eq:Y_agg}\\
+\Pi_t&=(\Pi_t^1)^{s_1}(\Pi_t^2)^{s_2}.
+\label{eq:Pi_agg}
+\end{align}
+货币政策冲击满足
+\begin{equation}
+MP_t=\rho_{MP}MP_{t-1}+\varepsilon_{MP,t}.
+\label{eq:MP_process}
+\end{equation}
+Taylor 规则为
+\begin{equation}
+\frac{R_t}{\bar R}
+=\left(\frac{R_{t-1}}{\bar R}\right)^{\rho_R}
+\left[
+\left(\frac{\Pi_t}{\bar\Pi}\right)^{\phi_\pi}
+\left(\frac{Y_t}{\bar Y}\right)^{\phi_Y}
+\right]^{1-\rho_R}
+\exp(MP_t),
+\label{eq:Taylor}
+\end{equation}
+其中 $\varepsilon_{MP,t}>0$ 表示紧缩性货币政策冲击。
+
+\section{市场出清与竞争均衡}
+
+地区 $j$ 的最终品资源约束为
+\begin{equation}
+Y_t^j=C_t^j+I_t^j+G_t^j+I_{G,t}^j.
+\label{eq:resource}
+\end{equation}
+该式说明最终品用于居民消费、私人投资、政府消费和公共投资。跨地区中间品贸易已通过最终品 CES 生产函数和中间品市场出清式 \eqref{eq:intermediate_clearing} 进入模型，因此最终品资源约束中不需要另写净出口项。
+
+给定初始状态 $\{K_0^j,K_{G,0}^j,B_{-1}^j,V_{-1}^j,I_{-1}^j,I_{G,-1}^j,FP_{-1}^j\}_{j=1,2}$、政策规则和冲击过程，竞争均衡是一组价格和数量
+\[
+\begin{gathered}
+\{C_{R,t}^j,C_{H,t}^j,C_t^j,N_{R,t}^j,N_{H,t}^j,N_t^j,I_t^j,K_t^j,Q_{K,t}^j,\\
+Y_t^j,Y_{M,t}^j,M_{k,t}^j,Q_{k,t}^j,W_t^j,R_{K,t}^j,MC_t^j,\Pi_t^j,\Pi_{M,t}^j,\\
+p_{*,t}^j,X_{1,t}^j,X_{2,t}^j,V_t^j,B_t^j,R_{B,t}^j,DS_t^j,FS_t^j,FP_t^j,I_{G,t}^j,K_{G,t}^j,R_t\}
+\end{gathered}
+\]
+使家庭最优化、最终品企业成本最小化、中间品企业定价、地方政府预算约束、公共投资规则、公共资本积累、货币政策规则和所有市场出清条件同时成立。
+
+\section{机制命题}
+
+\begin{proposition}[地方债务异质性和公共投资挤出]
+若 $\bar B^2/\bar Y^2>\bar B^1/\bar Y^1$，且 $\psi_{DS}>0$ 或 $\psi_{FS}>0$，则统一货币紧缩冲击会使高债务地区的实际债务付息压力上升更多，并通过财政空间收缩和公共投资规则导致高债务地区公共投资下降更多。若 $\psi_Z>0$ 且中央转移支付对债务付息压力作正向反应，则该效应会被部分缓冲。
+\end{proposition}
+
+\noindent 证明思路如下。紧缩性货币政策冲击提高统一名义利率，并通过需求收缩降低地区通胀。由式 \eqref{eq:DS} 可知，$R_{B,t-1}^j/\Pi_t^j$ 上升会提高既有名义债务的实际付息负担。由于地区 2 的初始债务率更高，同样的利率和通胀变化会使 $DS_t^2$ 上升幅度更大。由式 \eqref{eq:FS} 可知，较高的付息压力会压缩地方可支配财政空间；由式 \eqref{eq:FP} 和式 \eqref{eq:IG_rule} 可知，较高的付息压力提高平滑财政压力并压低公共投资。因此，高债务地区公共投资下降更多。中央转移支付 $Z_t^j$ 进入式 \eqref{eq:FS}，并可通过式 \eqref{eq:IG_rule} 中的专项转移项进一步发挥作用，因此可以缓冲但不必然完全抵消高债务地区的公共投资收缩。
+
+\begin{proposition}[公共资本、私人投资和消费放大]
+若 $\gamma_G>0$，则公共投资下降会通过公共资本积累放缓降低本地生产能力和私人资本边际产出，进而压低私人投资、劳动收入和消费；若 $\lambda_j>0$，hand-to-mouth 家庭会放大消费和通胀的下行响应。
+\end{proposition}
+
+\noindent 由式 \eqref{eq:KG_law} 可知，公共投资下降降低未来公共资本。由式 \eqref{eq:intermediate_production} 可知，公共资本下降降低给定私人资本和劳动下的中间品产出，并通过式 \eqref{eq:rk_demand} 降低私人资本回报，进而通过式 \eqref{eq:euler_capital} 和式 \eqref{eq:inv_foc} 压低私人投资。同时，劳动需求和工资下降会通过式 \eqref{eq:budget_H} 直接压低 hand-to-mouth 家庭消费，并通过式 \eqref{eq:C_agg} 放大地区总消费和通胀下行。
+
+\section{稳态条件}
+
+在零通胀稳态下，
+\begin{equation}
+\bar\Pi^j=\bar\Pi_M^j=\bar\Pi=1,\qquad \bar R=\frac{1}{\beta},\qquad \bar p_*^j=1,\qquad \bar V^j=1.
+\end{equation}
+若稳态债务利差为零，则 $\bar R_B^j=\bar R$。Calvo 模块给出
+\begin{equation}
+\bar{MC}^j=\frac{\epsilon_p-1}{\epsilon_p}.
+\end{equation}
+私人资本 Euler 方程给出
+\begin{equation}
+\bar R_K^j=\frac{1}{\beta}-1+\delta_K.
+\end{equation}
+私人资本和公共资本稳态分别满足
+\begin{equation}
+\bar I^j=\delta_K\bar K^j,
+\qquad
+\bar I_G^j=\delta_G\bar K_G^j.
+\end{equation}
+地方政府稳态预算约束为
+\begin{equation}
+\bar B^j=\bar R_B^j\bar B^j+\bar G^j+\bar I_G^j+
+\lambda_j\bar{TR}_H^j-(1-\theta_T)\tau_Y\bar Y^j-\bar Z^j,
+\end{equation}
+或等价地
+\begin{equation}
+(1-\theta_T)\tau_Y\bar Y^j+\bar Z^j-\bar G^j-\bar I_G^j-
+\lambda_j\bar{TR}_H^j
+=(\bar R_B^j-1)\bar B^j.
+\end{equation}
+稳态债务付息压力、平滑财政压力和可支配财政空间分别为
+\begin{equation}
+\bar{DS}^j=(\bar R_B^j-1)\frac{\bar B^j}{\bar Y^j},
+\qquad
+\bar{FP}^j=\bar{DS}^j,
+\end{equation}
+\begin{equation}
+\bar{FS}^j=(1-\theta_T)\tau_Y\bar Y^j+\bar Z^j
+-(\bar R_B^j-1)\bar B^j-\bar G^j-\lambda_j\bar{TR}_H^j.
+\end{equation}
+由地方政府稳态预算约束可知，债务稳定要求 $\bar{FS}^j=\bar I_G^j$。因此，在地方税收留成比例给定时，稳态债务率更高的地区需要更高的初级盈余、更低的公共支出、更高的中央转移支付，或者更低的其他财政支出才能稳定债务。中央分享比例 $\theta_T$ 越高，地方自有财政收入越低，公共投资对中央转移支付和债务融资条件越敏感。
+
+\appendix
+\section{可用于 Dynare 的完整非线性动态系统}
+
+本附录列出可直接翻译为 Dynare 代码的完整非线性系统。为了便于编程，记 $j=1,2$，$k=1,2$。在 Dynare 中可将变量命名为 \texttt{cr1, ch1, c1, nr1, nh1, n1, inv1, k1, qk1} 等；地区 2 的变量可相应命名为 \texttt{cr2, ch2, c2, ...}。
+
+\subsection{家庭和私人资本}
+
+对 $j=1,2$：
+\begin{align}
+\Lambda_{R,t}^j&=(C_{R,t}^j)^{-\sigma},
+\label{dyn_lambda}\\
+\Lambda_{R,t}^j&=\beta E_t\left[\Lambda_{R,t+1}^j\frac{R_{B,t}^j}{\Pi_{t+1}^j}\right],
+\label{dyn_euler_bond}\\
+\chi_N(N_{R,t}^j)^{\varphi}&=\Lambda_{R,t}^jW_t^j,
+\label{dyn_labor_R}\\
+C_{H,t}^j&=W_t^jN_{H,t}^j+TR_{H,t}^j,
+\label{dyn_budget_H}\\
+\chi_N(N_{H,t}^j)^{\varphi}&=(C_{H,t}^j)^{-\sigma}W_t^j,
+\label{dyn_labor_H}\\
+C_t^j&=(1-\lambda_j)C_{R,t}^j+\lambda_jC_{H,t}^j,
+\label{dyn_C}\\
+N_t^j&=(1-\lambda_j)N_{R,t}^j+\lambda_jN_{H,t}^j,
+\label{dyn_N}\\
+K_{t+1}^j&=(1-\delta_K)K_t^j+
+\left[1-S\left(\frac{I_t^j}{I_{t-1}^j}\right)\right]I_t^j,
+\label{dyn_K}\\
+Q_{K,t}^j&=\beta E_t\left[
+\frac{\Lambda_{R,t+1}^j}{\Lambda_{R,t}^j}
+\left(R_{K,t+1}^j+(1-\delta_K)Q_{K,t+1}^j\right)
+\right],
+\label{dyn_capital_euler}\\
+1&=Q_{K,t}^j
+\left[
+1-S\left(\frac{I_t^j}{I_{t-1}^j}\right)
+-S'\left(\frac{I_t^j}{I_{t-1}^j}\right)\frac{I_t^j}{I_{t-1}^j}
+\right]
+\notag\\
+&\quad+\beta E_t\left[
+\frac{\Lambda_{R,t+1}^j}{\Lambda_{R,t}^j}
+Q_{K,t+1}^jS'\left(\frac{I_{t+1}^j}{I_t^j}\right)
+\left(\frac{I_{t+1}^j}{I_t^j}\right)^2
+\right].
+\label{dyn_I_foc}
+\end{align}
+其中
+\begin{equation}
+S(x)=\frac{\phi_I}{2}(x-1)^2,
+\qquad
+S'(x)=\phi_I(x-1).
+\end{equation}
+
+\subsection{最终品企业和相对价格}
+
+对 $j=1,2$：
+\begin{align}
+1&=\left[
+\omega_j(Q_{j,t}^j)^{1-\eta}
++(1-\omega_j)(Q_{-j,t}^j)^{1-\eta}
+\right]^{\frac{1}{1-\eta}},
+\label{dyn_final_price}\\
+M_{j,t}^j&=\omega_j(Q_{j,t}^j)^{-\eta}Y_t^j,
+\label{dyn_M_local}\\
+M_{-j,t}^j&=(1-\omega_j)(Q_{-j,t}^j)^{-\eta}Y_t^j.
+\label{dyn_M_foreign}
+\end{align}
+对所有 $k,j\in\{1,2\}$：
+\begin{equation}
+\frac{Q_{k,t}^j}{Q_{k,t-1}^j}=\frac{\Pi_{M,t}^k}{\Pi_t^j}.
+\label{dyn_q}
+\end{equation}
+
+\subsection{中间品生产、要素需求和 Calvo 定价}
+
+对 $j=1,2$：
+\begin{align}
+\log A_t^j&=\rho_A\log A_{t-1}^j+\varepsilon_{A,t}^j,
+\label{dyn_A}\\
+Y_{M,t}^j&=\frac{A_t^j(K_{G,t}^j)^{\gamma_G}(K_t^j)^{\alpha}(N_t^j)^{1-\alpha}}{V_t^j},
+\label{dyn_YM}\\
+W_t^j&=(1-\alpha)Q_{j,t}^jMC_t^j\frac{Y_{M,t}^jV_t^j}{N_t^j},
+\label{dyn_W}\\
+R_{K,t}^j&=\alpha Q_{j,t}^jMC_t^j\frac{Y_{M,t}^jV_t^j}{K_t^j},
+\label{dyn_RK}\\
+Y_{M,t}^j&=M_{j,t}^1+M_{j,t}^2,
+\label{dyn_YM_clear}\\
+1&=(1-\theta_p)(p_{*,t}^j)^{1-\epsilon_p}+\theta_p(\Pi_{M,t}^j)^{\epsilon_p-1},
+\label{dyn_calvo}\\
+X_{1,t}^j&=\Lambda_{R,t}^jQ_{j,t}^jMC_t^jY_{M,t}^j
++\beta\theta_pE_t\left[(\Pi_{M,t+1}^j)^{\epsilon_p}X_{1,t+1}^j\right],
+\label{dyn_x1}\\
+X_{2,t}^j&=\Lambda_{R,t}^jQ_{j,t}^jY_{M,t}^j
++\beta\theta_pE_t\left[(\Pi_{M,t+1}^j)^{\epsilon_p-1}X_{2,t+1}^j\right],
+\label{dyn_x2}\\
+p_{*,t}^j&=\frac{\epsilon_p}{\epsilon_p-1}\frac{X_{1,t}^j}{X_{2,t}^j},
+\label{dyn_pstar}\\
+V_t^j&=(1-\theta_p)(p_{*,t}^j)^{-\epsilon_p}+\theta_p(\Pi_{M,t}^j)^{\epsilon_p}V_{t-1}^j.
+\label{dyn_V}
+\end{align}
+
+\subsection{地方政府、公共投资和公共资本}
+
+对 $j=1,2$：
+\begin{align}
+DS_t^j&=\left(\frac{R_{B,t-1}^j}{\Pi_t^j}-1\right)\frac{B_{t-1}^j}{Y_t^j},
+\label{dyn_DS}\\
+FS_t^j&=(1-\theta_T)\tau_Y Y_t^j+Z_t^j
+-\left(\frac{R_{B,t-1}^j}{\Pi_t^j}-1\right)B_{t-1}^j-G_t^j-\lambda_jTR_{H,t}^j,
+\label{dyn_FS}\\
+\frac{R_{B,t}^j}{R_t}&=\exp\left[\mu_B\left(\frac{B_t^j/Y_t^j}{\bar B^j/\bar Y^j}-1\right)\right],
+\label{dyn_RB}\\
+FP_t^j&=\rho_{FP}FP_{t-1}^j+(1-\rho_{FP})DS_t^j,
+\label{dyn_FP}\\
+\frac{I_{G,t}^j}{\bar I_G^j}
+&=\left(\frac{I_{G,t-1}^j}{\bar I_G^j}\right)^{\rho_{IG}}
+\exp\Bigg[
+-\psi_{DS}\left(\frac{FP_t^j}{\bar{FP}^j}-1\right)
++\psi_{FS}\left(\frac{FS_t^j}{\bar{FS}^j}-1\right)\notag\\
+&\qquad
+-\psi_B\left(\frac{B_{t-1}^j/Y_{t-1}^j}{\bar B^j/\bar Y^j}-1\right)
++\psi_Z\left(\frac{Z_t^j}{\bar Z^j}-1\right)
++\varepsilon_{IG,t}^j
+\Bigg],
+\label{dyn_IG}\\
+K_{G,t+1}^j&=(1-\delta_G)K_{G,t}^j+I_{G,t}^j,
+\label{dyn_KG}\\
+B_t^j&=\frac{R_{B,t-1}^j}{\Pi_t^j}B_{t-1}^j
++G_t^j+I_{G,t}^j+\lambda_jTR_{H,t}^j
+-(1-\theta_T)\tau_Y Y_t^j-Z_t^j,
+\label{dyn_B}\\
+\log\left(\frac{G_t^j}{\bar G^j}\right)&=\rho_G\log\left(\frac{G_{t-1}^j}{\bar G^j}\right)+\varepsilon_{G,t}^j,
+\label{dyn_G}\\
+\log\left(\frac{TR_{H,t}^j}{\bar{TR}_H^j}\right)&=\rho_{TR}\log\left(\frac{TR_{H,t-1}^j}{\bar{TR}_H^j}\right)+\varepsilon_{TR,t}^j,
+\label{dyn_TR}\\
+\log\left(\frac{Z_t^j}{\bar Z^j}\right)&=\rho_Z\log\left(\frac{Z_{t-1}^j}{\bar Z^j}\right)
++\phi_{Z,DS}\left(\frac{DS_t^j}{\bar{DS}^j}-1\right)
++\phi_{Z,B}\left(\frac{B_{t-1}^j/Y_{t-1}^j}{\bar B^j/\bar Y^j}-1\right)
++\varepsilon_{Z,t}^j.
+\label{dyn_Z}
+\end{align}
+
+\subsection{货币政策和市场出清}
+
+\begin{align}
+Y_t&=s_1Y_t^1+s_2Y_t^2,
+\label{dyn_Yagg}\\
+\Pi_t&=(\Pi_t^1)^{s_1}(\Pi_t^2)^{s_2},
+\label{dyn_Piagg}\\
+MP_t&=\rho_{MP}MP_{t-1}+\varepsilon_{MP,t},
+\label{dyn_MP}\\
+\frac{R_t}{\bar R}
+&=\left(\frac{R_{t-1}}{\bar R}\right)^{\rho_R}
+\left[
+\left(\frac{\Pi_t}{\bar\Pi}\right)^{\phi_\pi}
+\left(\frac{Y_t}{\bar Y}\right)^{\phi_Y}
+\right]^{1-\rho_R}\exp(MP_t).
+\label{dyn_Taylor}
+\end{align}
+对 $j=1,2$，最终品资源约束为
+\begin{equation}
+Y_t^j=C_t^j+I_t^j+G_t^j+I_{G,t}^j.
+\label{dyn_resource}
+\end{equation}
+
+\subsection{Dynare 实现顺序}
+
+建议按以下顺序写 Dynare：第一，先令 $\mu_B=0$、$\phi_{Z,DS}=\phi_{Z,B}=0$、$\psi_Z=0$，关闭地方债利差和中央转移支付反应；第二，先令 $\varepsilon_{A,t}^j=\varepsilon_{G,t}^j=\varepsilon_{TR,t}^j=\varepsilon_{Z,t}^j=\varepsilon_{IG,t}^j=0$，只保留统一货币政策冲击 $\varepsilon_{MP,t}$；第三，设两地区除 $\bar B^j/\bar Y^j$ 外完全对称，并令 $\bar B^2/\bar Y^2>\bar B^1/\bar Y^1$；第四，检查 IRF 是否满足
+\begin{equation}
+DS_t^2>DS_t^1,
+\qquad
+I_{G,t}^2<I_{G,t}^1,
+\qquad
+K_{G,t}^2<K_{G,t}^1,
+\qquad
+Y_t^2<Y_t^1,
+\qquad
+C_t^2<C_t^1
+\end{equation}
+在相对于各自稳态的响应意义下成立。机制跑通后，再逐步打开地方债利差、中央转移支付反应和地区异质性参数。
+
+\end{document}
