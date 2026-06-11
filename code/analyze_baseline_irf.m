@@ -17,6 +17,7 @@ shock_suffix = '_emp';
 periods = [1 4 8 12];
 
 pairs = {
+    'Local bond rate',       'rb1', 'rb2', 'higher is costlier';
     'Debt service pressure', 'ds1', 'ds2', 'higher is more pressure';
     'Fiscal space',          'fs1', 'fs2', 'lower is tighter';
     'Public investment',     'ig1', 'ig2', 'lower is weaker';

@@ -71,4 +71,3 @@ subplot(3,3,9);
 % plot(h, oo_.irfs.pinf1_emp, 'LineWidth', 1.5); hold on;
 plot(h, oo_.irfs.mp_emp, 'LineWidth', 1.5);
 title('Inflation'); grid on;
-

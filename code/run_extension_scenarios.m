@@ -8,6 +8,9 @@
 %   4. risk premium + transfer buffer
 %   5. stronger interregional input linkages
 %   6. weaker interregional input linkages
+%
+% Scenario .mod files are regenerated from TANK_two_region_baseline.mod on
+% every run. TANK_two_region_baseline_old.mod is only a historical backup.
 
 clear;
 clc;

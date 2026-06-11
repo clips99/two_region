@@ -35,6 +35,15 @@ add_check('pinf2 = 1', ss.pinf2 - 1);
 add_check('pim1 = 1', ss.pim1 - 1);
 add_check('pim2 = 1', ss.pim2 - 1);
 add_check('pinfagg = 1', ss.pinfagg - 1);
+add_check('risk sharing: lam2 = lam1 * q11 / q12', ...
+    ss.lam2 - ss.lam1 * ss.q11 / ss.q12);
+
+rb_rule1 = ss.rb1 / ss.r ...
+    - exp(params.mu_b * ((ss.b1 / ss.y1) / params.b_y1 - 1));
+rb_rule2 = ss.rb2 / ss.r ...
+    - exp(params.mu_b * ((ss.b2 / ss.y2) / params.b_y2 - 1));
+add_check('region 1 local bond pricing rule', rb_rule1);
+add_check('region 2 local bond pricing rule', rb_rule2);
 
 mc_target = (params.epsilon_p - 1) / params.epsilon_p;
 add_check('mc1 = (epsilon_p - 1) / epsilon_p', ss.mc1 - mc_target);

@@ -4,6 +4,7 @@
 // - no earmarked transfer effect in the public investment rule: psi_z = 0
 // - no technology, government spending, transfer, or public investment shocks
 // - only a common contractionary monetary policy shock is active
+// - asset market is closed by common risk-free Euler for region 1 and risk-sharing condition for region 2
 
 var
     cr1 ch1 c1 nr1 nh1 n1 inv1 k1 qk1 lam1
@@ -159,7 +160,7 @@ model;
 
     // Region 1 households and private capital
     lam1 = cr1^(-sigma);
-    lam1 = beta * lam1(+1) * rb1 / pinf1(+1);
+    lam1 = beta * lam1(+1) * r / pinf1(+1);
     chi_n * nr1^varphi = lam1 * w1;
     ch1 = w1 * nh1 + tr1;
     chi_n * nh1^varphi = ch1^(-sigma) * w1;
@@ -172,8 +173,6 @@ model;
 
     // Region 2 households and private capital
     lam2 = cr2^(-sigma);
-    // With mu_b = 0 both regional bonds pay the common nominal return.
-    // This complete-markets closure removes the redundant second bond Euler.
     lam2 = lam1 * q11 / q12;
     chi_n * nr2^varphi = lam2 * w2;
     ch2 = w2 * nh2 + tr2;
@@ -197,7 +196,7 @@ model;
     q11 / q11(-1) = pim1 / pinf1;
     q21 / q21(-1) = pim2 / pinf1;
     q12 / q12(-1) = pim1 / pinf2;
-    q11 * q22 = q12 * q21;
+    q22 / q22(-1) = pim2 / pinf2;
 
     // Intermediate goods production and price setting
     log(a1) = rho_a * log(a1(-1));
@@ -270,7 +269,7 @@ model;
     pinfagg = pinf1^s1 * pinf2^s2;
     mp = rho_mp * mp(-1) + emp;
     r / rbar = (r(-1) / rbar)^rho_r
-        * ((pinfagg(-1) / pinfbar)^phi_pi * (yagg(-1) / ybar)^phi_y)^(1 - rho_r)
+        * ((pinfagg / pinfbar)^phi_pi * (yagg / ybar)^phi_y)^(1 - rho_r)
         * exp(mp);
 
     y1 = c1 + inv1 + g1 + ig1;
