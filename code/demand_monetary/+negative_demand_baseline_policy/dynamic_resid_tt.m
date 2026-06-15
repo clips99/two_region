@@ -1,0 +1,63 @@
+function [T_order, T] = dynamic_resid_tt(y, x, params, steady_state, T_order, T)
+if T_order >= 0
+    return
+end
+T_order = 0;
+if size(T, 1) < 54
+    T = [T; NaN(54 - size(T, 1), 1)];
+end
+T(1) = params(9)/2;
+T(2) = params(9)*(y(161)/y(84)-1);
+T(3) = params(9)*(y(193)/y(116)-1);
+T(4) = y(79)^(-params(2));
+T(5) = params(1)*y(164)/y(87);
+T(6) = (y(161)/y(84))^2;
+T(7) = y(111)^(-params(2));
+T(8) = params(1)*y(196)/y(119);
+T(9) = (y(193)/y(116))^2;
+T(10) = params(14)*y(146)^(1-params(16))+(1-params(14))*y(147)^(1-params(16));
+T(11) = 1/(1-params(16));
+T(12) = params(14)*y(146)^(-params(16));
+T(13) = (1-params(14))*y(147)^(-params(16));
+T(14) = params(15)*y(149)^(1-params(16))+(1-params(15))*y(148)^(1-params(16));
+T(15) = params(15)*y(149)^(-params(16));
+T(16) = (1-params(15))*y(148)^(-params(16));
+T(17) = y(83)^(1-params(10));
+T(18) = params(1)*params(12)*y(171)^params(13);
+T(19) = params(1)*params(12)*y(171)^(params(13)-1);
+T(20) = params(13)/(params(13)-1);
+T(21) = params(12)*y(94)^params(13);
+T(22) = y(115)^(1-params(10));
+T(23) = params(1)*params(12)*y(203)^params(13);
+T(24) = params(1)*params(12)*y(203)^(params(13)-1);
+T(25) = params(12)*y(126)^params(13);
+T(26) = exp(params(30)*(y(99)/y(88)/params(48)-1));
+T(27) = (y(27)/params(58))^params(22);
+T(28) = y(22)/y(11)/params(48)-1;
+T(29) = exp((-params(31))*(y(103)/params(72)-1)+params(32)*(y(102)/params(74)-1)-params(33)*T(28)+params(34)*(y(109)/params(76)-1));
+T(30) = exp(params(30)*(y(131)/y(120)/params(49)-1));
+T(31) = (y(59)/params(59))^params(22);
+T(32) = y(54)/y(43)/params(49)-1;
+T(33) = exp((-params(31))*(y(135)/params(73)-1)+params(32)*(y(134)/params(75)-1)-params(33)*T(32)+params(34)*(y(141)/params(77)-1));
+T(34) = y(93)^params(37);
+T(35) = y(125)^params(38);
+T(36) = (y(75)/params(39))^params(24);
+T(37) = (y(151)/params(40))^params(26);
+T(38) = (y(150)/params(41))^params(27);
+T(39) = T(37)*T(38);
+T(40) = T(39)^(1-params(24));
+T(41) = y(28)^params(11);
+T(42) = y(106)*T(41);
+T(43) = y(8)^params(10);
+T(44) = T(42)*T(43);
+T(45) = y(60)^params(11);
+T(46) = y(138)*T(45);
+T(47) = y(40)^params(10);
+T(48) = T(46)*T(47);
+T(49) = 1-T(1)*(y(84)/y(7)-1)^2;
+T(50) = T(49)-y(84)*params(9)*(y(84)/y(7)-1)/y(7);
+T(51) = T(2)*T(5)*y(163);
+T(52) = 1-T(1)*(y(116)/y(39)-1)^2;
+T(53) = T(52)-y(116)*params(9)*(y(116)/y(39)-1)/y(39);
+T(54) = T(3)*T(8)*y(195);
+end
