@@ -78,13 +78,13 @@ for i = 1:numel(policy_rules)
         results(end).M = loaded.M_;
 
         status = [status; table(string(scenario_name), string(scenario_label), ...
-            rule.phi_pi, rho_demand, demand_shock_stderr, string('ok'), string(''), ...
+            rule.phi_pi, rho_demand, demand_shock_stderr, "ok", "", ...
             'VariableNames', {'scenario','label','phi_pi','rho_demand', ...
             'shock_stderr','status','notes'})]; %#ok<AGROW>
     catch err
         warning('Negative-demand policy scenario %s failed: %s', scenario_name, err.message);
         status = [status; table(string(scenario_name), string(scenario_label), ...
-            rule.phi_pi, rho_demand, demand_shock_stderr, string('failed'), string(err.message), ...
+            rule.phi_pi, rho_demand, demand_shock_stderr, "failed", string(err.message), ...
             'VariableNames', {'scenario','label','phi_pi','rho_demand', ...
             'shock_stderr','status','notes'})]; %#ok<AGROW>
     end
@@ -199,15 +199,12 @@ function summary = collect_summary(oo_, scenario, shock_suffix, periods)
 
     ds1 = get_irf(oo_, 'ds1', shock_suffix);
     ds2 = get_irf(oo_, 'ds2', shock_suffix);
-    fs1 = get_irf(oo_, 'fs1', shock_suffix);
     fs2 = get_irf(oo_, 'fs2', shock_suffix);
     ig1 = get_irf(oo_, 'ig1', shock_suffix);
     ig2 = get_irf(oo_, 'ig2', shock_suffix);
-    kg1 = get_irf(oo_, 'kg1', shock_suffix);
     kg2 = get_irf(oo_, 'kg2', shock_suffix);
     y1 = get_irf(oo_, 'y1', shock_suffix);
     y2 = get_irf(oo_, 'y2', shock_suffix);
-    c1 = get_irf(oo_, 'c1', shock_suffix);
     c2 = get_irf(oo_, 'c2', shock_suffix);
     pinf1 = get_irf(oo_, 'pinf1', shock_suffix);
     pinf2 = get_irf(oo_, 'pinf2', shock_suffix);
@@ -483,7 +480,7 @@ function xi = solve_consumption_equivalent(base_paths, target_welfare, params)
         upper = 0;
     end
 
-    for iter = 1:120 %#ok<NASGU>
+    for iter = 1:120
         mid = 0.5 * (lower + upper);
         mid_welfare = welfare_with_consumption_shift(base_paths, mid, params);
         if mid_welfare < target_welfare

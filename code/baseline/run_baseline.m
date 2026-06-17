@@ -18,7 +18,7 @@ if isfolder(dynare_path)
     addpath(dynare_path);
 end
 
-dynare TANK_two_region_baseline.mod noclearall
+dynare TANK_two_region_baseline.mod noclearall nolog
 
 run('check_steady_state.m');
 run('analyze_baseline_irf.m');

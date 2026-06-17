@@ -89,6 +89,7 @@ for i = 1:numel(policy_rules)
     clear cleaner;
 
     try
+        clear M_ oo_ options_ estim_params_ bayestopt_ dataset_ dataset_info;
         evalc(sprintf('dynare %s noclearall', scenario_mod));
         result_file = fullfile(rule.name, 'Output', [rule.name '_results.mat']);
         loaded = load(result_file, 'oo_');
@@ -109,14 +110,14 @@ for i = 1:numel(policy_rules)
 
         status = [status; table(string(rule.name), string(rule.label), ...
             rule.psi_L, limit_settings.ucrit, limit_settings.nu, ...
-            limit_settings.ubar1, limit_settings.ubar2, string('ok'), string(''), ...
+            limit_settings.ubar1, limit_settings.ubar2, "ok", "", ...
             'VariableNames', {'scenario','label','psi_L','ucrit','nu', ...
             'ubar1','ubar2','status','notes'})]; %#ok<AGROW>
     catch err
         warning('Policy counterfactual %s failed: %s', rule.name, err.message);
         status = [status; table(string(rule.name), string(rule.label), ...
             rule.psi_L, limit_settings.ucrit, limit_settings.nu, ...
-            limit_settings.ubar1, limit_settings.ubar2, string('failed'), string(err.message), ...
+            limit_settings.ubar1, limit_settings.ubar2, "failed", string(err.message), ...
             'VariableNames', {'scenario','label','psi_L','ucrit','nu', ...
             'ubar1','ubar2','status','notes'})]; %#ok<AGROW>
     end
@@ -157,6 +158,7 @@ for i = 1:numel(transfer_rules)
     clear cleaner;
 
     try
+        clear M_ oo_ options_ estim_params_ bayestopt_ dataset_ dataset_info;
         evalc(sprintf('dynare %s noclearall', scenario_mod));
         result_file = fullfile(rule.name, 'Output', [rule.name '_results.mat']);
         loaded = load(result_file, 'oo_');
@@ -180,14 +182,14 @@ for i = 1:numel(transfer_rules)
 
         transfer_status = [transfer_status; table(string(rule.name), string(rule.label), ...
             rule.rho_z, rule.psi_z, rule.phi_z_ds, rule.phi_z_b, ...
-            string('ok'), string(''), ...
+            "ok", "", ...
             'VariableNames', {'scenario','label','rho_z','psi_z', ...
             'phi_z_ds','phi_z_b','status','notes'})]; %#ok<AGROW>
     catch err
         warning('Central transfer counterfactual %s failed: %s', rule.name, err.message);
         transfer_status = [transfer_status; table(string(rule.name), string(rule.label), ...
             rule.rho_z, rule.psi_z, rule.phi_z_ds, rule.phi_z_b, ...
-            string('failed'), string(err.message), ...
+            "failed", string(err.message), ...
             'VariableNames', {'scenario','label','rho_z','psi_z', ...
             'phi_z_ds','phi_z_b','status','notes'})]; %#ok<AGROW>
     end
@@ -228,6 +230,7 @@ for i = 1:numel(balance_rules)
     clear cleaner;
 
     try
+        clear M_ oo_ options_ estim_params_ bayestopt_ dataset_ dataset_info;
         evalc(sprintf('dynare %s noclearall', scenario_mod));
         result_file = fullfile(rule.name, 'Output', [rule.name '_results.mat']);
         loaded = load(result_file, 'oo_');
@@ -246,13 +249,13 @@ for i = 1:numel(balance_rules)
         balance_results(end).oo = loaded.oo_;
 
         balance_status = [balance_status; table(string(rule.name), string(rule.label), ...
-            rule.phi_reg, string('ok'), string(''), ...
+            rule.phi_reg, "ok", "", ...
             'VariableNames', {'scenario','label','phi_reg','status','notes'})]; %#ok<AGROW>
     catch err
         warning('Regional-balance monetary counterfactual %s failed: %s', ...
             rule.name, err.message);
         balance_status = [balance_status; table(string(rule.name), string(rule.label), ...
-            rule.phi_reg, string('failed'), string(err.message), ...
+            rule.phi_reg, "failed", string(err.message), ...
             'VariableNames', {'scenario','label','phi_reg','status','notes'})]; %#ok<AGROW>
     end
 end
@@ -309,10 +312,8 @@ function text = add_regional_balance_parameter(text)
 end
 
 function text = add_regional_balance_calibration(text, phi_reg)
-    insert_after = 'phi_y      = 0.10;';
-    calibration = sprintf([insert_after '\n' ...
-        'phi_reg    = %.8g;'], phi_reg);
-    text = replace_exactly_once(text, insert_after, calibration);
+    calibration = sprintf('$1\nphi_reg    = %.8g;', phi_reg);
+    text = regex_replace_once(text, '(?m)^(phi_y\s*=\s*[^;]+;)', calibration);
 end
 
 function text = replace_taylor_rule_with_balance_target(text)
@@ -412,11 +413,9 @@ function summary = collect_summary(oo_, scenario, periods, shock_suffix, b_y1, b
     b2 = get_irf(oo_, 'b2', shock_suffix);
     ds1 = get_irf(oo_, 'ds1', shock_suffix);
     ds2 = get_irf(oo_, 'ds2', shock_suffix);
-    fs1 = get_irf(oo_, 'fs1', shock_suffix);
     fs2 = get_irf(oo_, 'fs2', shock_suffix);
     ig1 = get_irf(oo_, 'ig1', shock_suffix);
     ig2 = get_irf(oo_, 'ig2', shock_suffix);
-    kg1 = get_irf(oo_, 'kg1', shock_suffix);
     kg2 = get_irf(oo_, 'kg2', shock_suffix);
     y1 = get_irf(oo_, 'y1', shock_suffix);
     y2 = get_irf(oo_, 'y2', shock_suffix);

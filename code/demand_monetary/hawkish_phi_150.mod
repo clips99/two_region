@@ -50,22 +50,22 @@ parameters
 
 // Common household and production parameters
 beta       = 0.99;
-sigma      = 1.00;
-varphi     = 1.00;
+sigma      = 2.00;
+varphi     = 0.50;
 lambda1    = 0.30;
 lambda2    = 0.30;
 delta_k    = 0.025;
 delta_g    = 0.025;
 phi_i      = 2.00;
-alpha      = 0.33;
-gamma_g    = 0.08;
+alpha      = 0.45;
+gamma_g    = 0.10;
 
 // Common price-setting and interregional input aggregation parameters
 theta_p    = 0.75;
 epsilon_p  = 6.00;
 omega1     = 0.85;
 omega2     = 0.85;
-eta        = 1.50;
+eta        = 0.90;
 
 // Common policy and fiscal-rule parameters
 rho_a      = 0.00;
@@ -77,9 +77,9 @@ rho_ig     = 0.70;
 rho_mp     = 0.50;
 rho_r      = 0.90;
 phi_pi     = 1.5;
-phi_y      = 0.10;
+phi_y      = 0.50;
 tau_y      = 0.40;
-theta_T    = 0.50;
+theta_T    = 0.60;
 
 mu_b       = 0.00;
 psi_ds     = 0.10;
